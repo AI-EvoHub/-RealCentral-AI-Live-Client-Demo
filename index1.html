@@ -1,0 +1,520 @@
+<!DOCTYPE html><html><head><meta charset="UTF-8">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,'Inter',sans-serif;background:#09090F;color:#EEEEF5}
+:root{
+  --bg:#09090F;--bg1:#0E0E18;--bg2:#14141F;--bg3:#1C1C2B;
+  --b:rgba(255,255,255,.06);--b2:rgba(255,255,255,.11);--b3:rgba(255,255,255,.18);
+  --t:#EEEEF5;--t2:#8888A8;--t3:#404060;
+  --ac:#6366F1;--ac2:#818CF8;--gr:#10B981;--gr2:#34D399;--am:#F59E0B;--rd:#EF4444
+}
+.shell{height:668px;display:flex;flex-direction:column;background:var(--bg);border-radius:14px;overflow:hidden;border:1px solid var(--b2)}
+/* NAV */
+nav{height:50px;background:var(--bg1);border-bottom:1px solid var(--b);display:flex;align-items:center;padding:0 14px;gap:10px;flex-shrink:0}
+.logo{display:flex;align-items:center;gap:8px}
+.logo-i{width:28px;height:28px;border-radius:8px;background:linear-gradient(135deg,#6366F1,#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.logo-t{font-size:13px;font-weight:600;background:linear-gradient(90deg,#fff,#A5B4FC);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.nsep{width:1px;height:18px;background:var(--b2);flex-shrink:0}
+.ntabs{display:flex;gap:2px}
+.ntab{display:flex;align-items:center;gap:5px;padding:5px 10px;font-size:12px;font-weight:500;border:1px solid transparent;border-radius:7px;background:none;cursor:pointer;color:var(--t2);transition:all .15s;white-space:nowrap}
+.ntab:hover{color:var(--t);background:var(--bg2)}
+.ntab.on{background:var(--bg3);border-color:var(--b2);color:var(--t)}
+.ch-d{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.nav-r{margin-left:auto;display:flex;align-items:center;gap:7px}
+.badge-live{display:flex;align-items:center;gap:4px;font-size:11px;font-weight:500;padding:3px 9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.22);border-radius:20px;color:var(--gr)}
+.ldot{width:5px;height:5px;border-radius:50%;background:var(--gr);animation:ld 2s infinite}
+@keyframes ld{0%,100%{opacity:1}50%{opacity:.35}}
+.badge-cl{font-size:11px;font-weight:500;padding:3px 10px;background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.22);border-radius:20px;color:var(--ac2)}
+.rtf{font-size:11px;padding:3px 9px;background:rgba(16,185,129,.1);border:1px solid rgba(16,185,129,.18);border-radius:20px;color:var(--gr2);opacity:0;transition:opacity .3s;white-space:nowrap}
+.rtf.show{opacity:1}
+/* BODY */
+.body{display:flex;flex:1;overflow:hidden}
+/* SIDEBAR */
+.side{width:194px;flex-shrink:0;border-right:1px solid var(--b);display:flex;flex-direction:column;background:var(--bg1);overflow-y:auto}
+.s-sec{padding:11px 10px 0}
+.s-lbl{font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;padding:0 3px;margin-bottom:7px}
+.s-card{background:var(--bg2);border:1px solid var(--b);border-radius:9px;margin:0 0 5px;padding:7px 10px;border-left:3px solid transparent}
+.s-card.ac{border-left-color:var(--ac)}.s-card.gr{border-left-color:var(--gr)}.s-card.am{border-left-color:var(--am)}.s-card.pu{border-left-color:#A855F7}
+.sv{font-size:19px;font-weight:600;color:var(--t)}.sl{font-size:10px;color:var(--t2);margin-top:1px}
+.sdiv{height:1px;background:var(--b);margin:8px 0 4px}
+.sc-btn{display:block;width:100%;margin:0 0 4px;padding:5px 9px;background:var(--bg2);border:1px solid var(--b);border-radius:7px;font-size:11px;color:var(--t2);cursor:pointer;text-align:left;transition:all .15s;line-height:1.4}
+.sc-btn:hover{background:var(--bg3);border-color:var(--b2);color:var(--t)}
+.sc-btn:last-child{margin-bottom:10px}
+/* MAIN */
+.main{flex:1;display:flex;flex-direction:column;overflow:hidden;min-width:0}
+.view{display:none;flex:1;flex-direction:column;overflow:hidden}
+.view.on{display:flex}
+/* ── WHATSAPP ── */
+.wa-hdr{background:#1F2C34;padding:9px 13px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.wa-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#25D366,#128C7E);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0}
+.wa-n{font-size:13px;font-weight:600;color:#E9EDEF}.wa-s{font-size:10px;color:#8696A0}
+.wa-acts{margin-left:auto;display:flex;gap:14px;color:#8696A0;font-size:16px}
+.wa-msgs{flex:1;overflow-y:auto;padding:10px;background:#0B141A;display:flex;flex-direction:column;gap:4px}
+.wb{max-width:74%;padding:6px 9px 18px;border-radius:7.5px;font-size:12.5px;position:relative;line-height:1.5;word-break:break-word;color:#E9EDEF}
+.wb.s{background:#005C4B;align-self:flex-end;border-radius:7.5px 7.5px 2px 7.5px}
+.wb.r{background:#202C33;align-self:flex-start;border-radius:2px 7.5px 7.5px 7.5px}
+.wts{position:absolute;bottom:3px;right:7px;font-size:10px;color:rgba(233,237,239,.45);white-space:nowrap}
+.wa-bar{background:#1F2C34;padding:7px 9px;display:flex;gap:7px;align-items:center;flex-shrink:0}
+.wa-inp{flex:1;background:#2A3942;border:none;border-radius:20px;padding:9px 14px;font-size:13px;color:#E9EDEF;outline:none;font-family:inherit}
+.wa-inp::placeholder{color:#8696A0}
+.wa-send{width:38px;height:38px;border-radius:50%;background:#00A884;border:none;cursor:pointer;color:white;font-size:15px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .1s}
+.wa-send:active{transform:scale(.93)}
+/* ── SMS ── */
+.sms-hdr{background:#1C1C1E;padding:9px 13px;display:flex;align-items:center;gap:10px;flex-shrink:0;border-bottom:1px solid rgba(255,255,255,.04)}
+.sms-av{width:34px;height:34px;border-radius:50%;background:linear-gradient(135deg,#30D158,#34C759);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:white;flex-shrink:0}
+.sms-msgs{flex:1;overflow-y:auto;padding:12px 14px;background:#000;display:flex;flex-direction:column;gap:6px}
+.sb{max-width:72%;padding:9px 13px;font-size:12.5px;line-height:1.5;word-break:break-word;border-radius:18px}
+.sb.s{background:#248BFF;color:white;align-self:flex-end;border-radius:18px 18px 4px 18px}
+.sb.r{background:#1C1C1E;color:#F5F5F7;align-self:flex-start;border-radius:18px 18px 18px 4px}
+.sms-bar{background:#1C1C1E;padding:7px 9px;display:flex;gap:6px;align-items:center;flex-shrink:0;border-top:1px solid rgba(255,255,255,.06)}
+.sms-inp{flex:1;background:#2C2C2E;border:1px solid rgba(255,255,255,.08);border-radius:18px;padding:8px 14px;font-size:13px;color:#F5F5F7;outline:none;font-family:inherit}
+.sms-inp::placeholder{color:#48484A}
+.sms-send{padding:8px 14px;background:#248BFF;border:none;border-radius:14px;color:white;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0}
+/* ── WEB CHAT ── */
+.wc-hdr{background:linear-gradient(135deg,#4F46E5,#7C3AED);padding:10px 13px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.wc-ico{width:32px;height:32px;border-radius:9px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.wc-ol{margin-left:auto;font-size:11px;color:rgba(255,255,255,.8);display:flex;align-items:center;gap:4px}
+.wc-msgs{flex:1;overflow-y:auto;padding:12px;background:var(--bg);display:flex;flex-direction:column;gap:8px}
+.wcb{max-width:78%;padding:9px 13px;font-size:12.5px;line-height:1.5;word-break:break-word;border-radius:13px}
+.wcb.s{background:var(--ac);color:white;align-self:flex-end;border-radius:13px 13px 3px 13px}
+.wcb.r{background:var(--bg2);color:var(--t);align-self:flex-start;border-radius:13px 13px 13px 3px;border:1px solid var(--b)}
+.wc-bar{padding:9px 10px;border-top:1px solid var(--b);display:flex;gap:7px;align-items:center;flex-shrink:0;background:var(--bg1)}
+.wc-inp{flex:1;border:1px solid var(--b2);border-radius:9px;padding:8px 12px;font-size:13px;background:var(--bg2);color:var(--t);outline:none;font-family:inherit}
+.wc-inp:focus{border-color:var(--ac)}.wc-inp::placeholder{color:var(--t3)}
+.wc-send{padding:8px 14px;background:var(--ac);border:none;border-radius:8px;color:white;font-size:12px;font-weight:600;cursor:pointer;flex-shrink:0}
+/* ── VOICE ── */
+.v-setup{padding:11px 14px;border-bottom:1px solid var(--b);background:var(--bg1);display:flex;align-items:center;gap:8px;flex-shrink:0}
+.v-slbl{font-size:11px;color:var(--t2);white-space:nowrap;flex-shrink:0}
+.v-key{flex:1;background:var(--bg2);border:1px solid var(--b2);border-radius:7px;padding:6px 10px;font-size:11px;color:var(--t);outline:none;font-family:monospace}
+.v-key:focus{border-color:var(--ac)}.v-key::placeholder{color:var(--t3)}
+.v-cbtn{padding:6px 14px;background:var(--ac);border:none;border-radius:7px;color:white;font-size:12px;font-weight:600;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:background .15s}
+.v-cbtn:hover{background:var(--ac2)}.v-cbtn.end{background:var(--rd)}.v-cbtn:disabled{opacity:.5;cursor:default}
+.v-body{flex:1;display:flex;overflow:hidden}
+.v-center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;padding:20px}
+.v-orb{width:96px;height:96px;border-radius:50%;background:linear-gradient(135deg,var(--ac),#8B5CF6);display:flex;align-items:center;justify-content:center;font-size:34px;transition:all .3s}
+.v-orb.listening{animation:vorb 1.8s ease-in-out infinite}
+.v-orb.speaking{background:linear-gradient(135deg,var(--gr),#059669);animation:vspk .6s ease-in-out infinite alternate}
+@keyframes vorb{0%,100%{box-shadow:0 0 0 0 rgba(99,102,241,.3)}50%{box-shadow:0 0 0 28px rgba(99,102,241,0)}}
+@keyframes vspk{from{box-shadow:0 0 0 4px rgba(16,185,129,.3)}to{box-shadow:0 0 0 22px rgba(16,185,129,0)}}
+.v-waves{display:flex;align-items:center;gap:3px;height:28px}
+.vw{width:3px;border-radius:2px;background:var(--ac);height:4px;opacity:.3;transition:background .3s}
+.vw.a{opacity:1;animation:vwave .45s ease-in-out infinite alternate}
+.vw:nth-child(1){animation-delay:0s}.vw:nth-child(2){animation-delay:.07s}.vw:nth-child(3){animation-delay:.14s}.vw:nth-child(4){animation-delay:.21s}
+.vw:nth-child(5){animation-delay:.28s}.vw:nth-child(6){animation-delay:.21s}.vw:nth-child(7){animation-delay:.14s}.vw:nth-child(8){animation-delay:.07s}
+@keyframes vwave{from{height:3px}to{height:26px}}
+.v-status{font-size:13px;color:var(--t2);text-align:center;max-width:260px;line-height:1.5}
+.v-status.on{color:var(--gr)}.v-status.sp{color:var(--ac2)}.v-status.err{color:var(--rd)}
+.v-trans{width:240px;border-left:1px solid var(--b);background:var(--bg1);display:flex;flex-direction:column;flex-shrink:0;overflow:hidden}
+.vt-hdr{padding:9px 12px;font-size:9px;font-weight:700;color:var(--t3);text-transform:uppercase;letter-spacing:.1em;border-bottom:1px solid var(--b);flex-shrink:0}
+.vt-m{flex:1;overflow-y:auto;padding:9px;display:flex;flex-direction:column;gap:7px}
+.vtm{padding:7px 9px;border-radius:8px;font-size:11.5px;line-height:1.5;max-width:95%}
+.vtm.user{background:var(--bg3);color:var(--t);align-self:flex-end;border-radius:8px 8px 2px 8px;text-align:right}
+.vtm.ai{background:rgba(99,102,241,.1);border:1px solid rgba(99,102,241,.18);color:var(--t);border-radius:8px 8px 8px 2px}
+.vtl{font-size:10px;font-weight:600;margin-bottom:3px}.vtm.user .vtl{color:var(--t2)}.vtm.ai .vtl{color:var(--ac2)}
+.vt-empty{font-size:11.5px;color:var(--t3);text-align:center;padding:24px 14px;line-height:1.6}
+/* ── DASHBOARD ── */
+.dash{flex:1;overflow-y:auto;padding:13px;background:var(--bg);display:flex;flex-direction:column;gap:9px}
+.dg{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.dc{background:var(--bg2);border:1px solid var(--b);border-radius:11px;padding:11px 13px;position:relative;overflow:hidden}
+.dcv{font-size:24px;font-weight:600;color:var(--t)}.dcl{font-size:11px;color:var(--t2);margin-top:2px}
+.dci{position:absolute;right:11px;top:50%;transform:translateY(-50%);font-size:22px;opacity:.07}
+.dlog{background:var(--bg2);border:1px solid var(--b);border-radius:11px;overflow:hidden}
+.dl-hdr{padding:9px 13px;font-size:12px;font-weight:600;color:var(--t);border-bottom:1px solid var(--b);display:flex;align-items:center;gap:6px}
+.dl-badge{font-size:10px;padding:1px 7px;border-radius:10px;background:rgba(16,185,129,.1);color:var(--gr);border:1px solid rgba(16,185,129,.18)}
+.dr{padding:7px 13px;border-bottom:1px solid var(--b);display:flex;align-items:flex-start;gap:9px}
+.dr:last-child{border-bottom:none}
+.dr-ico{width:22px;height:22px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;margin-top:1px}
+.dr-u{font-size:12px;font-weight:500;color:var(--t);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.dr-a{font-size:11px;color:var(--t2);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:1px}
+.dr-ok{font-size:10px;padding:1px 6px;border-radius:8px;background:rgba(16,185,129,.1);color:var(--gr2);border:1px solid rgba(16,185,129,.12);flex-shrink:0;margin-top:2px}
+.cbr{background:var(--bg2);border:1px solid var(--b);border-radius:11px;padding:11px 13px}
+.cbr-row{display:flex;align-items:center;gap:8px;margin-bottom:7px}.cbr-row:last-child{margin-bottom:0}
+.cbr-dot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.cbr-lbl{font-size:11px;color:var(--t2);min-width:68px}
+.cbr-bar{flex:1;height:5px;background:var(--bg3);border-radius:3px;overflow:hidden}
+.cbr-fill{height:100%;border-radius:3px;transition:width .5s ease}
+.cbr-val{font-size:11px;color:var(--t);font-weight:500;min-width:20px;text-align:right}
+/* TYPING */
+.tw{align-self:flex-start}
+.typ{display:flex;gap:4px;padding:8px 11px;border-radius:7.5px;align-items:center}
+.typ.wa{background:#202C33;border-radius:2px 12px 12px 12px}
+.typ.sms{background:#1C1C1E;border-radius:18px 18px 18px 4px}
+.typ.wc{background:var(--bg2);border:1px solid var(--b);border-radius:13px 13px 13px 3px}
+.td{width:6px;height:6px;border-radius:50%;animation:tda .8s ease-in-out infinite}
+.typ.wa .td{background:#8696A0}.typ.sms .td{background:#636366}.typ.wc .td{background:var(--t3)}
+.td:nth-child(2){animation-delay:.15s}.td:nth-child(3){animation-delay:.3s}
+@keyframes tda{0%,60%,100%{transform:translateY(0)}30%{transform:translateY(-5px)}}
+::-webkit-scrollbar{width:3px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:var(--b2);border-radius:2px}
+</style>
+<div class="shell">
+<nav>
+  <div class="logo"><div class="logo-i">🏖️</div><span class="logo-t">RealCentral AI</span></div>
+  <div class="nsep"></div>
+  <div class="ntabs">
+    <button class="ntab on" onclick="sw('wa',this)"><span class="ch-d" style="background:#25D366"></span>WhatsApp</button>
+    <button class="ntab" onclick="sw('sms',this)"><span class="ch-d" style="background:#30D158"></span>SMS</button>
+    <button class="ntab" onclick="sw('wc',this)"><span class="ch-d" style="background:#6366F1"></span>Web chat</button>
+    <button class="ntab" onclick="sw('voice',this)"><span class="ch-d" style="background:#F59E0B"></span>Voice AI</button>
+    <button class="ntab" onclick="sw('dash',this)"><span class="ch-d" style="background:#A855F7"></span>Dashboard</button>
+  </div>
+  <div class="nav-r">
+    <span class="rtf" id="rtf"></span>
+    <span class="badge-live"><span class="ldot"></span>Live AI</span>
+    <span class="badge-cl" id="cl-lbl">Azure Villas</span>
+  </div>
+</nav>
+<div class="body">
+  <aside class="side">
+    <div class="s-sec">
+      <div class="s-lbl">Live metrics</div>
+      <div class="s-card ac"><div class="sv" id="s-tot">0</div><div class="sl">Messages handled</div></div>
+      <div class="s-card gr"><div class="sv" id="s-rate" style="color:var(--gr)">—</div><div class="sl">Auto-resolution rate</div></div>
+      <div class="s-card am"><div class="sv" id="s-time" style="font-size:14px">&lt; 2s</div><div class="sl">Avg response time</div></div>
+      <div class="s-card pu"><div class="sv" id="s-book">0</div><div class="sl">Booking inquiries</div></div>
+    </div>
+    <div class="sdiv"></div>
+    <div class="s-sec">
+      <div class="s-lbl">Demo scenarios</div>
+      <button class="sc-btn" onclick="fire('wa','What time is check-in and check-out? 🏖️')">⏰ Check-in / check-out</button>
+      <button class="sc-btn" onclick="fire('wa',\"Book Villa Azul, July 4–8, 4 guests?\")">📅 Booking inquiry</button>
+      <button class="sc-btn" onclick="fire('sms','WiFi password?')">📶 WiFi (SMS)</button>
+      <button class="sc-btn" onclick="fire('sms','Do you allow small dogs?')">🐕 Pet policy (SMS)</button>
+      <button class="sc-btn" onclick="fire('wc','What is the cancellation policy?')">❌ Cancellation (chat)</button>
+      <button class="sc-btn" onclick="fire('wc','Can I get early check-in at 11am?')">🔑 Early check-in (chat)</button>
+      <button class="sc-btn" onclick="sw('voice',document.querySelectorAll('.ntab')[3])">🎙️ Try voice AI</button>
+    </div>
+  </aside>
+  <div class="main">
+    <!-- WHATSAPP -->
+    <div class="view on" id="v-wa">
+      <div class="wa-hdr">
+        <div class="wa-av">🏖️</div>
+        <div><div class="wa-n" id="wa-n">Azure Villas — AI Concierge</div><div class="wa-s">Typically replies instantly · end-to-end encrypted</div></div>
+        <div class="wa-acts"><span>🔍</span><span>⋮</span></div>
+      </div>
+      <div class="wa-msgs" id="wa-m"></div>
+      <div class="wa-bar">
+        <span style="color:#8696A0;font-size:17px;cursor:pointer">😊</span>
+        <input class="wa-inp" id="wa-inp" placeholder="Type a message" onkeydown="if(event.key==='Enter')snd('wa')">
+        <span style="color:#8696A0;font-size:17px;cursor:pointer">📎</span>
+        <button class="wa-send" onclick="snd('wa')">➤</button>
+      </div>
+    </div>
+    <!-- SMS -->
+    <div class="view" id="v-sms">
+      <div class="sms-hdr">
+        <div class="sms-av" id="sms-av">AV</div>
+        <div><div class="wa-n" id="sms-n">Azure Villas</div><div class="wa-s">Text Message · AI Concierge 24/7</div></div>
+      </div>
+      <div class="sms-msgs" id="sms-m"></div>
+      <div class="sms-bar">
+        <input class="sms-inp" id="sms-inp" placeholder="iMessage" maxlength="320" onkeydown="if(event.key==='Enter')snd('sms')">
+        <button class="sms-send" onclick="snd('sms')">Send ↑</button>
+      </div>
+    </div>
+    <!-- WEB CHAT -->
+    <div class="view" id="v-wc">
+      <div class="wc-hdr">
+        <div class="wc-ico">🏖️</div>
+        <div><div class="wa-n" id="wc-n" style="color:white">Azure Villas Support</div><div class="wa-s" style="color:rgba(255,255,255,.65)">AI-powered · 24/7 availability</div></div>
+        <div class="wc-ol"><div style="width:7px;height:7px;border-radius:50%;background:#4ADE80"></div>Online</div>
+      </div>
+      <div class="wc-msgs" id="wc-m"></div>
+      <div class="wc-bar">
+        <input class="wc-inp" id="wc-inp" placeholder="Ask anything about your stay..." onkeydown="if(event.key==='Enter')snd('wc')">
+        <button class="wc-send" onclick="snd('wc')">Send</button>
+      </div>
+    </div>
+    <!-- VOICE -->
+    <div class="view" id="v-voice">
+      <div class="v-setup">
+        <span class="v-slbl">Gemini API key</span>
+        <input class="v-key" id="v-key" type="password" placeholder="AIza... · Get yours free at aistudio.google.com">
+        <button class="v-cbtn" id="v-btn" onclick="toggleVoice()">Connect</button>
+      </div>
+      <div class="v-body">
+        <div class="v-center">
+          <div class="v-orb" id="v-orb">🎙️</div>
+          <div class="v-waves" id="v-waves">
+            <div class="vw" id="vw0"></div><div class="vw" id="vw1"></div><div class="vw" id="vw2"></div><div class="vw" id="vw3"></div>
+            <div class="vw" id="vw4"></div><div class="vw" id="vw5"></div><div class="vw" id="vw6"></div><div class="vw" id="vw7"></div>
+          </div>
+          <div class="v-status" id="v-st">Enter your Gemini API key above and click Connect to start a live AI voice call with Maya</div>
+        </div>
+        <div class="v-trans">
+          <div class="vt-hdr">Live transcript</div>
+          <div class="vt-m" id="vt-m"><div class="vt-empty" id="vt-empty">Transcript appears here once the call begins.</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- DASHBOARD -->
+    <div class="view" id="v-dash">
+      <div class="dash">
+        <div style="font-size:14px;font-weight:600;color:var(--t)">Manager overview <span style="font-size:11px;font-weight:400;color:var(--t2);margin-left:6px">Real-time · all channels</span></div>
+        <div class="dg">
+          <div class="dc"><div class="dcv" id="d-tot">0</div><div class="dcl">Total conversations</div><div class="dci">💬</div></div>
+          <div class="dc"><div class="dcv" id="d-rate" style="color:var(--gr)">—</div><div class="dcl">AI auto-resolution</div><div class="dci">🤖</div></div>
+          <div class="dc"><div class="dcv" id="d-book">0</div><div class="dcl">Booking inquiries</div><div class="dci">📅</div></div>
+          <div class="dc"><div class="dcv" style="color:var(--ac)">&lt; 2s</div><div class="dcl">Avg first response</div><div class="dci">⚡</div></div>
+        </div>
+        <div class="cbr">
+          <div style="font-size:11px;font-weight:600;color:var(--t);margin-bottom:9px">Channel breakdown</div>
+          <div class="cbr-row"><div class="cbr-dot" style="background:#25D366"></div><span class="cbr-lbl">WhatsApp</span><div class="cbr-bar"><div class="cbr-fill" id="cb-wa" style="width:0%;background:#25D366"></div></div><span class="cbr-val" id="cv-wa">0</span></div>
+          <div class="cbr-row"><div class="cbr-dot" style="background:#30D158"></div><span class="cbr-lbl">SMS</span><div class="cbr-bar"><div class="cbr-fill" id="cb-sms" style="width:0%;background:#30D158"></div></div><span class="cbr-val" id="cv-sms">0</span></div>
+          <div class="cbr-row"><div class="cbr-dot" style="background:#6366F1"></div><span class="cbr-lbl">Web chat</span><div class="cbr-bar"><div class="cbr-fill" id="cb-wc" style="width:0%;background:#6366F1"></div></div><span class="cbr-val" id="cv-wc">0</span></div>
+        </div>
+        <div class="dlog">
+          <div class="dl-hdr">Recent activity <span class="dl-badge">100% AI handled</span></div>
+          <div id="d-log"><div style="padding:14px 13px;font-size:11px;color:var(--t3)">No conversations yet — fire a scenario to see live activity.</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const cfg={
+  company:'Azure Villas',aiName:'Maya',loc:'Miami, Malibu & Tulum',
+  cin:'3:00 PM',cout:'11:00 AM',wnet:'AzureVillas_Guest',wpass:'Sunset2024',
+  pool:'7 AM – 10 PM',park:'2 free spots',pets:'Small dogs under 20lbs · $75 pet fee',
+  cancel:'Full refund 7+ days · 50% refund 3–6 days · No refund < 48 hours',
+  props:[{n:'Villa Azul',d:'4BR beachfront, sleeps 10',p:'$699/night'},
+         {n:'Palm Suite',d:'2BR pool view, sleeps 4',p:'$349/night'},
+         {n:'The Penthouse',d:'3BR city view, sleeps 6',p:'$499/night'}]
+};
+
+function sys(ch){
+  const tone={wa:'WhatsApp: warm & friendly, 1–2 short paragraphs, 1–2 fitting emojis.',
+    sms:'SMS: ultra-concise, max 2 sentences, plain text only.',
+    wc:'Web chat: professional and clean, no emoji.'};
+  return `You are ${cfg.aiName}, a 24/7 AI concierge for ${cfg.company} (${cfg.loc}).
+CHECK-IN/OUT: ${cfg.cin} / ${cfg.cout} · WiFi: "${cfg.wnet}" · Password: ${cfg.wpass}
+Pool: ${cfg.pool} · Parking: ${cfg.park} · Pets: ${cfg.pets}
+Cancellation: ${cfg.cancel}
+Properties: ${cfg.props.map(p=>`${p.n} — ${p.d} — ${p.p}`).join(' | ')}
+Payment: 50% deposit, balance 30 days before arrival. Min stay 3 nights (7 in peak season).
+Style: ${tone[ch]||''} Keep under 90 words. End with a clear next step.`;
+}
+
+const st={msgs:{wa:[],sms:[],wc:[]},stats:{tot:0,book:0,wa:0,sms:0,wc:0},log:[],times:[]};
+const WEL={
+  wa:()=>`Hi there! 👋 I'm ${cfg.aiName}, your 24/7 AI concierge at ${cfg.company}. I'm here around the clock for bookings, property info, and anything about your stay. How can I help? 🏖️`,
+  sms:()=>`${cfg.company} AI here — available 24/7. Text us anytime with booking questions or property info. How can we help?`,
+  wc:()=>`Welcome to ${cfg.company}! I'm ${cfg.aiName}, available 24/7 for bookings, availability, and any questions about your stay. What can I help you with?`
+};
+const ts=()=>new Date().toLocaleTimeString('en',{hour:'2-digit',minute:'2-digit',hour12:false});
+
+function initCh(ch){
+  if(!st.msgs[ch].length){st.msgs[ch].push({r:'a',t:WEL[ch](),ts:ts()});render(ch);}
+}
+
+function render(ch){
+  const ids={wa:'wa-m',sms:'sms-m',wc:'wc-m'};
+  const el=document.getElementById(ids[ch]);if(!el)return;
+  el.innerHTML=st.msgs[ch].map(m=>{
+    if(m.typing){
+      if(ch==='wa')return`<div class="tw"><div class="typ wa"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+      if(ch==='sms')return`<div class="tw"><div class="typ sms"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+      return`<div class="tw"><div class="typ wc"><div class="td"></div><div class="td"></div><div class="td"></div></div></div>`;
+    }
+    const txt=m.t.replace(/\n/g,'<br>');
+    if(ch==='wa')return`<div class="wb ${m.r==='u'?'s':'r'}">${txt}<span class="wts">${m.ts||''}</span></div>`;
+    if(ch==='sms')return`<div class="sb ${m.r==='u'?'s':'r'}">${txt}</div>`;
+    return`<div class="wcb ${m.r==='u'?'s':'r'}">${txt}</div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+
+async function sendMsg(ch,txt){
+  if(!txt.trim())return;
+  st.msgs[ch].push({r:'u',t:txt,ts:ts()});st.msgs[ch].push({typing:true});render(ch);
+  const t0=Date.now();
+  const apiM=st.msgs[ch].filter(m=>!m.typing&&m.r).map(m=>({role:m.r==='u'?'user':'assistant',content:m.t}));
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',
+      headers:{'Content-Type':'application/json','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:sys(ch),messages:apiM})});
+    const data=await res.json();
+    const reply=data.content?.[0]?.text||'Sorry, something went wrong.';
+    const elapsed=((Date.now()-t0)/1000).toFixed(1);
+    st.msgs[ch]=st.msgs[ch].filter(m=>!m.typing);
+    st.msgs[ch].push({r:'a',t:reply,ts:ts()});
+    st.stats.tot++;st.stats[ch]++;st.times.push(parseFloat(elapsed));
+    if(/book|reserv|availab|night|stay|dates?|july|aug|june|villa|suite|penthouse/i.test(txt))st.stats.book++;
+    st.log.unshift({ch,u:txt,a:reply});if(st.log.length>8)st.log.pop();
+    render(ch);stats();flash(elapsed+'s');
+  }catch(e){
+    st.msgs[ch]=st.msgs[ch].filter(m=>!m.typing);
+    st.msgs[ch].push({r:'a',t:'Connection error — please try again.',ts:ts()});render(ch);
+  }
+}
+
+function snd(ch){
+  const ids={wa:'wa-inp',sms:'sms-inp',wc:'wc-inp'};
+  const inp=document.getElementById(ids[ch]);const v=inp.value.trim();if(!v)return;inp.value='';sendMsg(ch,v);
+}
+
+function fire(ch,msg){
+  const idx=['wa','sms','wc','voice','dash'].indexOf(ch);
+  sw(ch,document.querySelectorAll('.ntab')[idx]);
+  setTimeout(()=>sendMsg(ch,msg),120);
+}
+
+function sw(ch,el){
+  document.querySelectorAll('.ntab').forEach(t=>t.classList.remove('on'));
+  document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));
+  el.classList.add('on');document.getElementById('v-'+ch).classList.add('on');
+  if(ch!=='voice'&&ch!=='dash')initCh(ch);
+}
+
+function stats(){
+  const t=st.stats.tot,rate=t>0?'100%':'—';
+  const avg=st.times.length?(st.times.reduce((a,b)=>a+b)/st.times.length).toFixed(1)+'s':'< 2s';
+  [['s-tot','d-tot']].flat();
+  ['s-tot','d-tot'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=t});
+  ['s-rate','d-rate'].forEach(id=>{const e=document.getElementById(id);if(e)e.textContent=rate});
+  document.getElementById('s-time').textContent=avg;
+  document.getElementById('s-book').textContent=st.stats.book;
+  document.getElementById('d-book').textContent=st.stats.book;
+  ['wa','sms','wc'].forEach(ch=>{
+    const v=st.stats[ch],pct=t>0?Math.round(v/t*100):0;
+    const b=document.getElementById('cb-'+ch),c=document.getElementById('cv-'+ch);
+    if(b)b.style.width=pct+'%';if(c)c.textContent=v;
+  });
+  const el=document.getElementById('d-log');if(!st.log.length)return;
+  const ico={wa:'💬',sms:'📱',wc:'🌐'},bg={wa:'rgba(37,211,102,.12)',sms:'rgba(48,209,88,.12)',wc:'rgba(99,102,241,.12)'};
+  el.innerHTML=st.log.map(l=>`<div class="dr"><div class="dr-ico" style="background:${bg[l.ch]}">${ico[l.ch]}</div><div style="flex:1;min-width:0"><div class="dr-u">${l.u.substring(0,54)}${l.u.length>54?'…':''}</div><div class="dr-a">${l.a.substring(0,68)}${l.a.length>68?'…':''}</div></div><div class="dr-ok">AI ✓</div></div>`).join('');
+}
+
+function flash(t){const e=document.getElementById('rtf');e.textContent='⚡ '+t;e.classList.add('show');setTimeout(()=>e.classList.remove('show'),3000)}
+
+/* ── GEMINI LIVE VOICE ── */
+let vWs=null,capCtx=null,playCtx=null,micStr=null,capSrc=null,capProc=null;
+let nextPlay=0,vState='idle',setupOK=false;
+
+function vPrompt(){
+  return `You are ${cfg.aiName}, a friendly 24/7 AI voice concierge for ${cfg.company} (${cfg.loc}). This is a voice call — be conversational and brief (1–3 short sentences per reply). Check-in: ${cfg.cin} / Check-out: ${cfg.cout}. WiFi password: ${cfg.wpass}. Pets: ${cfg.pets}. Properties: ${cfg.props.map(p=>`${p.n} at ${p.p}`).join(', ')}. Cancellation: ${cfg.cancel}. Be warm and natural.`;
+}
+
+async function toggleVoice(){
+  if(vState==='active'||vState==='connecting'||vState==='speaking'){stopVoice();return;}
+  const key=document.getElementById('v-key').value.trim();
+  if(!key){setVS('err','Please enter your Gemini API key above');return;}
+  setVS('connecting');
+  try{micStr=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true}});}
+  catch(e){setVS('err','Microphone access denied — please allow mic access in your browser');return;}
+  const url=`wss://generativelanguage.googleapis.com/ws/google.ai.generativelanguage.v1beta.GenerativeService.BidiGenerateContent?key=${key}`;
+  vWs=new WebSocket(url);
+  vWs.onopen=()=>{
+    vWs.send(JSON.stringify({setup:{
+      model:'models/gemini-2.0-flash-live-001',
+      generation_config:{response_modalities:['AUDIO'],speech_config:{voice_config:{prebuilt_voice_config:{voice_name:'Aoede'}}}},
+      input_audio_transcription:{},output_audio_transcription:{},
+      system_instruction:{parts:[{text:vPrompt()}]}
+    }}));
+  };
+  vWs.onmessage=(e)=>{
+    let msg;try{msg=JSON.parse(e.data);}catch{return;}
+    if(msg.setupComplete!==undefined||msg.setup_complete!==undefined){setupOK=true;startCap();setVS('active');return;}
+    if(msg.serverContent||msg.server_content){
+      const sc=msg.serverContent||msg.server_content;
+      const turn=sc.modelTurn||sc.model_turn;
+      if(turn?.parts){
+        for(const p of turn.parts){
+          const d=p.inlineData?.data||p.inline_data?.data;
+          if(d){playAudio(d);setVS('speaking');}
+          if(p.text)addVt('ai',p.text);
+        }
+      }
+      const it=sc.inputTranscription||sc.input_transcription;if(it?.text)addVt('user',it.text);
+      const ot=sc.outputTranscription||sc.output_transcription;if(ot?.text)addVt('ai',ot.text);
+      const tc=sc.turnComplete||sc.turn_complete;if(tc&&vState==='speaking')setVS('active');
+    }
+    if(msg.error){setVS('err',msg.error.message||'API error');stopVoice();}
+  };
+  vWs.onerror=()=>{setVS('err','Connection failed — verify your Gemini API key');cleanVoice();};
+  vWs.onclose=()=>{if(vState!=='idle'){setVS('idle');cleanVoice();}};
+}
+
+function startCap(){
+  capCtx=new AudioContext({sampleRate:16000});
+  capSrc=capCtx.createMediaStreamSource(micStr);
+  capProc=capCtx.createScriptProcessor(4096,1,1);
+  capProc.onaudioprocess=(e)=>{
+    if(!vWs||vWs.readyState!==1||!setupOK)return;
+    const f32=e.inputBuffer.getChannelData(0);
+    const pcm=new Int16Array(f32.length);
+    for(let i=0;i<f32.length;i++)pcm[i]=Math.max(-32768,Math.min(32767,f32[i]*32767));
+    const bytes=new Uint8Array(pcm.buffer);let b='';
+    for(let i=0;i<bytes.length;i++)b+=String.fromCharCode(bytes[i]);
+    vWs.send(JSON.stringify({realtimeInput:{mediaChunks:[{mimeType:'audio/pcm;rate=16000',data:btoa(b)}]}}));
+  };
+  capSrc.connect(capProc);capProc.connect(capCtx.destination);
+}
+
+function playAudio(b64){
+  if(!playCtx){playCtx=new AudioContext({sampleRate:24000});nextPlay=0;}
+  try{
+    const bin=atob(b64),bytes=new Uint8Array(bin.length);
+    for(let i=0;i<bin.length;i++)bytes[i]=bin.charCodeAt(i);
+    const pcm=new Int16Array(bytes.buffer),f32=new Float32Array(pcm.length);
+    for(let i=0;i<pcm.length;i++)f32[i]=pcm[i]/32768;
+    const buf=playCtx.createBuffer(1,f32.length,24000);buf.getChannelData(0).set(f32);
+    const src=playCtx.createBufferSource();src.buffer=buf;src.connect(playCtx.destination);
+    const t=Math.max(playCtx.currentTime+0.02,nextPlay);src.start(t);nextPlay=t+buf.duration;
+  }catch(e){console.error(e);}
+}
+
+function stopVoice(){cleanVoice();setVS('idle');}
+
+function cleanVoice(){
+  setupOK=false;
+  if(capProc){capProc.disconnect();capProc=null;}
+  if(capSrc){capSrc.disconnect();capSrc=null;}
+  if(capCtx){capCtx.close().catch(()=>{});capCtx=null;}
+  if(micStr){micStr.getTracks().forEach(t=>t.stop());micStr=null;}
+  if(vWs&&vWs.readyState<2){vWs.close();}
+  vWs=null;
+  if(playCtx){playCtx.close().catch(()=>{});playCtx=null;}
+  nextPlay=0;
+}
+
+function setVS(state,msg){
+  vState=state;
+  const orb=document.getElementById('v-orb'),st2=document.getElementById('v-st'),btn=document.getElementById('v-btn');
+  const waves=document.querySelectorAll('.vw');
+  orb.className='v-orb';waves.forEach(w=>{w.className='vw';});
+  switch(state){
+    case 'connecting':
+      st2.textContent='Connecting to Gemini Live...';st2.className='v-status';
+      btn.textContent='Connecting...';btn.disabled=true;btn.className='v-cbtn';break;
+    case 'active':
+      st2.textContent='Listening — speak naturally and Maya will reply in real time';st2.className='v-status on';
+      btn.textContent='End call';btn.disabled=false;btn.className='v-cbtn end';
+      orb.classList.add('listening');waves.forEach(w=>{w.className='vw a';});break;
+    case 'speaking':
+      st2.textContent='Maya is speaking...';st2.className='v-status sp';
+      orb.classList.add('speaking');btn.textContent='End call';btn.disabled=false;btn.className='v-cbtn end';
+      waves.forEach(w=>{w.className='vw a';w.style.background='var(--gr)';});break;
+    case 'err':
+      st2.textContent=msg||'An error occurred';st2.className='v-status err';
+      btn.textContent='Retry';btn.disabled=false;btn.className='v-cbtn';break;
+    default:
+      st2.textContent='Enter your Gemini API key above and click Connect to start a live AI voice call with Maya';
+      st2.className='v-status';btn.textContent='Connect';btn.disabled=false;btn.className='v-cbtn';
+      waves.forEach(w=>w.style.background='var(--ac)');break;
+  }
+}
+
+function addVt(role,txt){
+  const m=document.getElementById('vt-m'),e=document.getElementById('vt-empty');
+  if(e)e.remove();
+  const div=document.createElement('div');div.className='vtm '+role;
+  div.innerHTML=`<div class="vtl">${role==='ai'?cfg.aiName:'You'}</div>`;
+  const c=document.createElement('div');c.textContent=txt;div.appendChild(c);
+  m.appendChild(div);m.scrollTop=m.scrollHeight;
+}
+
+initCh('wa');
+</script></html>
